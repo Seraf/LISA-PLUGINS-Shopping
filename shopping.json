@@ -1,0 +1,28 @@
+{
+    "name": "Shopping",
+    "version": "1.2.0",
+    "author": "Julien Syx",
+    "enabled": 1,
+    "description": [
+        {"lang": "fr", "description": "Ce plugin permet de gérer une liste de course"},
+        {"lang": "en", "description": "This plugin manage a shopping list"}
+    ],
+    "lang": ["fr","en"],
+    "configuration": {
+        "intents": {
+            "shopping_list": {
+                "method": "list",
+                "corpus": {}
+            },
+            "shopping_add": {
+                "method": "add",
+                "corpus": {}
+            },
+            "shopping_delete": {
+                "method": "delete",
+                "corpus": {}
+            }
+
+        }
+    }
+}

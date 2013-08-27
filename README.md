@@ -1,2 +1,0 @@
-LISA-PLUGINS-Shopping
-=====================
