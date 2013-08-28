@@ -20,3 +20,6 @@ msgstr "The product has been added to the list"
 
 msgid "no list"
 msgstr "There is no list available"
+
+msgid "product deleted"
+msgstr "The product has been removed from the list"
