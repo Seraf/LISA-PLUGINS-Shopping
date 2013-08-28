@@ -24,7 +24,7 @@ class Shopping:
             self.mongo.lisa.plugins.update(
                  {'_id': self.configuration['_id']},
                  {
-                     "$setOnInsert": {
+                     "$set": {
                          'lists.DefaultList.name': 'DefaultList',
                          'lists.DefaultList.items': []
                      }
@@ -51,8 +51,6 @@ class Shopping:
         }
 
     def add(self, jsonInput):
-        print self.mongo.lisa.plugins.find_one({'_id': self.configuration['_id'],
-                'lists.DefaultList.items.name': jsonInput['outcome']['entities']['shopping_item']['value']})
         self.mongo.lisa.plugins.update(
             {
                 '_id': self.configuration['_id']
@@ -65,5 +63,21 @@ class Shopping:
         self.answer = _('product added to the list')
         return {"plugin": "Shopping",
                 "method": "add",
+                "body": self.answer
+        }
+
+    def delete(self, jsonInput):
+        self.mongo.lisa.plugins.update(
+            {
+                '_id': self.configuration['_id']
+            },
+            {
+                '$pull': {'lists.DefaultList.items': {'name': jsonInput['outcome']['entities']['shopping_item']['value']}}
+            },
+            upsert=True
+        )
+        self.answer = _('product deleted')
+        return {"plugin": "Shopping",
+                "method": "delete",
                 "body": self.answer
         }
