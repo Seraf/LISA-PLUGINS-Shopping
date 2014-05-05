@@ -1,8 +1,10 @@
 {
     "name": "Shopping",
-    "version": "1.2.5",
+    "version": "1.0.0",
     "author": "Julien Syx",
     "enabled": 1,
+    "pypi-url": "https://pypi.python.org/pypi/lisa-plugin-Shopping",
+    "github-url": "https://raw.githubusercontent.com/Seraf/LISA-PLUGINS-Shopping/master/lisa/plugins/Shopping/shopping.json",
     "description": [
         {"lang": "fr", "description": "Ce plugin permet de gérer une liste de course"},
         {"lang": "en", "description": "This plugin manage a shopping list"}

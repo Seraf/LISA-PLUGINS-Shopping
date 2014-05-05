@@ -1,29 +1,27 @@
 # -*- coding: UTF-8 -*-
-import urllib, json, os, inspect
-from pymongo import MongoClient
-from lisa import configuration
-
+from lisa.server.plugins.IPlugin import IPlugin
 import gettext
+import inspect
+import os
 
-path = os.path.realpath(os.path.abspath(os.path.join(os.path.split(
-    inspect.getfile(inspect.currentframe()))[0],os.path.normpath("../lang/"))))
-_ = translation = gettext.translation(domain='shopping', localedir=path, languages=[configuration['lang']]).ugettext
 
-class Shopping:
-    def __init__(self, lisa=None):
-        self.lisa = lisa
-        self.configuration_lisa = configuration
-        self.mongo = MongoClient(self.configuration_lisa['database']['server'],
-                            self.configuration_lisa['database']['port'])
-        self.configuration = self.mongo.lisa.plugins.find_one({"name": "Shopping"})
+class Shopping(IPlugin):
+    def __init__(self):
+        super(Shopping, self).__init__()
+        self.configuration_plugin = self.mongo.lisa.plugins.find_one({"name": "Shopping"})
+        self.path = os.path.realpath(os.path.abspath(os.path.join(os.path.split(
+            inspect.getfile(inspect.currentframe()))[0],os.path.normpath("../lang/"))))
+        self._ = translation = gettext.translation(domain='shopping',
+                                                   localedir=self.path,
+                                                   languages=[self.configuration_lisa['lang']]).ugettext
         self.build_default_list()
         self.answer = None
 
     def build_default_list(self):
-        shoppingList = self.mongo.lisa.plugins.find_one({'_id': self.configuration['_id'], "lists.DefaultList": {"$exists": True}})
+        shoppingList = self.mongo.lisa.plugins.find_one({'_id': self.configuration_plugin['_id'], "lists.DefaultList": {"$exists": True}})
         if not shoppingList:
             self.mongo.lisa.plugins.update(
-                 {'_id': self.configuration['_id']},
+                 {'_id': self.configuration_plugin['_id']},
                  {
                      "$set": {
                          'lists.DefaultList.name': 'DefaultList',
@@ -34,7 +32,7 @@ class Shopping:
              )
 
     def list(self, jsonInput):
-        shoppingList = self.mongo.lisa.plugins.find_one({'_id': self.configuration['_id'], "lists.DefaultList": {"$exists": True}})
+        shoppingList = self.mongo.lisa.plugins.find_one({'_id': self.configuration_plugin['_id'], "lists.DefaultList": {"$exists": True}})
         print shoppingList
         if shoppingList:
             listitem = []
@@ -43,9 +41,9 @@ class Shopping:
                     listitem.append(item['name'] + '(' + item['quantity'] + ')')
                 else:
                     listitem.append(item['name'])
-            self.answer = _(' then ').join(listitem)
+            self.answer = self._(' then ').join(listitem)
         else:
-            self.answer = _('no list')
+            self.answer = self._('no list')
         return {"plugin": "Shopping",
                 "method": "list",
                 "body": self.answer
@@ -61,7 +59,7 @@ class Shopping:
             },
             upsert=True
         )
-        self.answer = _('product added to the list')
+        self.answer = self._('product added to the list')
         return {"plugin": "Shopping",
                 "method": "add",
                 "body": self.answer
@@ -70,14 +68,14 @@ class Shopping:
     def delete(self, jsonInput):
         self.mongo.lisa.plugins.update(
             {
-                '_id': self.configuration['_id']
+                '_id': self.configuration_plugin['_id']
             },
             {
                 '$pull': {'lists.DefaultList.items': {'name': jsonInput['outcome']['entities']['shopping_item']['value']}}
             },
             upsert=True
         )
-        self.answer = _('product deleted')
+        self.answer = self._('product deleted')
         return {"plugin": "Shopping",
                 "method": "delete",
                 "body": self.answer
