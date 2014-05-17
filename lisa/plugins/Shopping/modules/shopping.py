@@ -13,6 +13,7 @@ class Shopping(IPlugin):
             inspect.getfile(inspect.currentframe()))[0],os.path.normpath("../lang/"))))
         self._ = translation = gettext.translation(domain='shopping',
                                                    localedir=self.path,
+                                                   fallback=True,
                                                    languages=[self.configuration_lisa['lang']]).ugettext
         self.build_default_list()
         self.answer = None
