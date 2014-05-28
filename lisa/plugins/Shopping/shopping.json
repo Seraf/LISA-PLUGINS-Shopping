@@ -1,6 +1,6 @@
 {
     "name": "Shopping",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "author": "Julien Syx",
     "enabled": 1,
     "pypi-url": "https://pypi.python.org/pypi/lisa-plugin-Shopping",
