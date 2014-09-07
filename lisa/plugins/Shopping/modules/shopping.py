@@ -53,7 +53,7 @@ class Shopping(IPlugin):
     def add(self, jsonInput):
         self.mongo.lisa.plugins.update(
             {
-                '_id': self.configuration['_id']
+                '_id': self.configuration_plugin['_id']
             },
             {
                 '$addToSet': {'lists.DefaultList.items': {'name': jsonInput['outcome']['entities']['shopping_item']['value']}}
