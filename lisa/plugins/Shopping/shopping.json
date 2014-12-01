@@ -10,6 +10,7 @@
         {"lang": "en", "description": "This plugin manage a shopping list"}
     ],
     "lang": ["fr","en"],
+    "tags": ["shopping", "course", "courses", "list"],
     "configuration": {
         "intents": {
             "shopping_list": {
